@@ -798,8 +798,8 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk floorplan
 
 🔌 **VDD/VSS Network:** Complete power distribution structure
 
-# 🖼️ Open GUI to visualize floorplan
 ```bash
+# 🖼️ Open GUI to visualize floorplan
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
 ```
 
@@ -836,8 +836,8 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk place
 
 🔍 **Congestion Analysis:** Identifying potential routing bottlenecks
 
-# 🖼️ Open GUI to visualize placement
 ```bash
+# 🖼️ Open GUI to visualize placement
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 ```
 
@@ -888,9 +888,6 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 ```bash
 # 🌳 Build clock distribution tree
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk cts
-
-# 🖼️ Open GUI to visualize clock tree
-make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_cts
 ```
 
 ### 🌳 CTS Deliverables
@@ -902,6 +899,11 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_cts
 📊 **Skew Optimization:** Minimizing clock arrival time differences
 
 ⚡ **Slew Control:** Managing clock edge transition times
+
+```bash
+# 🖼️ Open GUI to visualize clock tree
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_cts
+```
 
 ### 🎯 CTS Verification Metrics
 
@@ -936,9 +938,6 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_cts
 ```bash
 # 🗺️ Run global and detailed routing
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk route
-
-# 🖼️ Open GUI to visualize routing
-make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_route
 ```
 
 ### 🎯 Routing Process
@@ -964,6 +963,11 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_route
 📏 **Via Insertion:** Vertical connections between metal layers
 
 🚫 **DRC Status:** 0 violations (clean layout)
+
+```bash
+# 🖼️ Open GUI to visualize routing
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_route
+```
 
 ### 🎨 Routing Visualization
 
@@ -1132,7 +1136,4 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk parasitics
 | 🔍 **Full Flow**          | `make DESIGN_CONFIG=...config.mk`                |
 
 ---
-
-
-
 
