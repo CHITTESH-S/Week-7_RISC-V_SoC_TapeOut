@@ -782,9 +782,6 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk synth
 ```bash
 # 🗺️ Run floorplan generation
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk floorplan
-
-# 🖼️ Open GUI to visualize floorplan
-make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
 ```
 
 ### 🎨 Floorplan Achievements
@@ -800,6 +797,11 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
 ⚡ **Power Grid:** Power rings and straps generated
 
 🔌 **VDD/VSS Network:** Complete power distribution structure
+
+# 🖼️ Open GUI to visualize floorplan
+```bash
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
+```
 
 ### 🖼️ Visual Verification
 
@@ -822,9 +824,6 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
 ```bash
 # 📍 Run global and detailed placement
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk place
-
-# 🖼️ Open GUI to visualize placement
-make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 ```
 
 ### 🏗️ Placement Process
@@ -836,6 +835,11 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 📊 **Density Optimization:** Balancing cell distribution for routability
 
 🔍 **Congestion Analysis:** Identifying potential routing bottlenecks
+
+# 🖼️ Open GUI to visualize placement
+```bash
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
+```
 
 ### 📊 Analysis Heatmaps
 
