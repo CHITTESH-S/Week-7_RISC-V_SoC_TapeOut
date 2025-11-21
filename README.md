@@ -4,15 +4,27 @@
 
 ---
 
-## 🌟 What Makes This Week Special
+## 🌟 Program Overview
 
-📦 **Integration Week** - Bringing together all previous stages into a unified flow
+### 📚 Course Context
 
-🤖 **Full Automation** - Leveraging ORFS to streamline the entire physical design process
+🔄 **Transition:** Manual stage-wise physical design → Full automation with OpenROAD-Flow-Scripts
 
-🔬 **Real-World Experience** - Understanding how production SoC designs move from logic to layout
+🎯 **Design Target:** VSDBabySoC - Complete 8-bit RISC-V SoC with analog peripherals
 
-💡 **End-to-End Flow** - From Verilog source code to manufacturable GDSII layout
+💾 **Technology:** Sky130 HD PDK (130nm High Density Process Design Kit)
+
+### 🎨 What Makes This Week Special
+
+📦 **Integration Week** - Bringing together all previous stages into unified automation
+
+🤖 **Full Automation** - Leveraging ORFS to streamline entire physical design process
+
+🔬 **Real-World Experience** - Understanding production SoC design flow from RTL to silicon
+
+💡 **End-to-End Flow** - Complete journey from Verilog source to manufacturable GDSII layout
+
+🏗️ **Open-Source Tools** - Demonstrating powerful capabilities of open-source ASIC design
 
 ---
 
@@ -561,12 +573,561 @@ flow/
 
 ---
 
+## 🧩 Design Integration - VSDBABYSOC
+
+### 📁 Directory Structure Setup
+
+#### 🗂️ Step 1: Create Design Directories
+
+```bash
+📂 Create design hierarchy
+mkdir -p flow/designs/sky130hd/vsdbabysoc
+mkdir -p flow/designs/src/vsdbabysoc
+```
+
+#### 📋 Step 2: File Organization
+
+**🎯 Into `designs/sky130hd/vsdbabysoc/`:**
+
+📐 **Layout Files:**
+- 🟦 `gds/` → avsddac.gds, avsdpll.gds (GDSII macro layouts)
+- 🟨 `lef/` → avsddac.lef, avsdpll.lef (Library Exchange Format abstracts)
+
+📚 **Library Files:**
+- 📖 `lib/` → avsddac.lib, avsdpll.lib (Timing and power characterization)
+
+📄 **Configuration Files:**
+- 📜 `include/` → all `.vh` Verilog header files
+- ⏱️ `vsdbabysoc_synthesis.sdc` → Timing constraints file
+- 🎯 `macro.cfg` → Macro placement configuration
+- 📌 `pin_order.cfg` → Pin ordering specification
+
+**🎯 Into `designs/src/vsdbabysoc/`:**
+
+💻 **RTL Source Files:**
+- 🔵 `vsdbabysoc.v` → Top-level SoC module
+- 🟢 `rvmyth.v` → RISC-V processor core (MYTHcore)
+- 🟡 `clk_gate.v` → Clock gating logic
+
+### 📊 Design Components
+
+🔷 **Digital Core:** RISC-V MYTHcore processor (8-bit architecture)
+
+🔶 **Analog Macros:**
+- 🎵 AVSD DAC (Digital-to-Analog Converter)
+- ⏰ AVSD PLL (Phase-Locked Loop for clock generation)
+
+🔸 **Clock Management:** Clock gating cells for power optimization
+
+🔹 **Technology:** Sky130 HD standard cell library
+
+---
+
+## ⚙️ Configuration Setup
+
+### 📝 Complete `config.mk` Configuration
+
+```makefile
+# 🎯 Design Identification
+export DESIGN_NICKNAME = vsdbabysoc
+export DESIGN_NAME = vsdbabysoc
+export PLATFORM    = sky130hd
+
+# 📂 RTL Source Files
+# export VERILOG_FILES_BLACKBOX = $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/IPs/*.v
+# export VERILOG_FILES = $(sort $(wildcard $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/*.v))
+# Explicitly list the Verilog files for synthesis
+export VERILOG_FILES = $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/vsdbabysoc.v \
+                       $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/rvmyth.v \
+                       $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/clk_gate.v
+
+# ⏱️ Timing Constraints
+export SDC_FILE = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/vsdbabysoc_synthesis.sdc
+
+# 📁 Design Directory Path
+export vsdbabysoc_DIR = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)
+
+# 📚 Additional Design Files
+export VERILOG_INCLUDE_DIRS = $(wildcard $(vsdbabysoc_DIR)/include/)
+# export SDC_FILE      = $(wildcard $(vsdbabysoc_DIR)/sdc/*.sdc)
+export ADDITIONAL_GDS  = $(wildcard $(vsdbabysoc_DIR)/gds/*.gds.gz)
+export ADDITIONAL_LEFS = $(wildcard $(vsdbabysoc_DIR)/lef/*.lef)
+export ADDITIONAL_LIBS = $(wildcard $(vsdbabysoc_DIR)/lib/*.lib)
+# export PDN_TCL = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/pdn.tcl
+
+# ⏰ Clock Configuration (vsdbabysoc specific)
+# export CLOCK_PERIOD = 20.0
+export CLOCK_PORT = CLK
+export CLOCK_NET = $(CLOCK_PORT)
+
+# 📐 Floorplanning Configuration (vsdbabysoc specific)
+export FP_PIN_ORDER_CFG = $(wildcard $(DESIGN_DIR)/pin_order.cfg)
+# export FP_SIZING = absolute
+export DIE_AREA  = 0 0 1600 1600
+export CORE_AREA = 20 20 1590 1590
+
+# 📌 Placement Configuration (vsdbabysoc specific)
+export FP_PIN_ORDER_CFG = $(wildcard $(DESIGN_DIR)/pin_order.cfg)
+export MACRO_PLACEMENT_CFG = $(wildcard $(DESIGN_DIR)/macro.cfg)
+export PLACE_PINS_ARGS = -exclude left:0-600 -exclude left:1000-1600: -exclude right:* -exclude top:* -exclude bottom:*
+# export MACRO_PLACEMENT = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/macro_placement.cfg
 
 
+# 🎯 Synthesis Optimization
+export TNS_END_PERCENT = 100
+export REMOVE_ABC_BUFFERS = 1
 
+# 🔧 Magic Tool Configuration
+export MAGIC_ZEROIZE_ORIGIN = 0
+export MAGIC_EXT_USE_GDS = 1
 
+# ⏰ CTS Tuning Parameters
+export CTS_BUF_DISTANCE = 600
+export SKIP_GATE_CLONING = 1
+# export CORE_UTILIZATION=0.1  # Reduce this value to allow more whitespace for routing.
+```
 
+### 📋 Configuration Parameters Explained
 
+🎯 **DESIGN_NICKNAME:** Short name for design identification
+
+🖥️ **PLATFORM:** Technology node (sky130hd = SkyWater 130nm High Density)
+
+📄 **VERILOG_FILES:** List of all RTL source files for synthesis
+
+⏱️ **SDC_FILE:** Synopsys Design Constraints for timing specifications
+
+⏰ **CLOCK_PORT/NET:** Primary clock signal identification
+
+📐 **DIE_AREA:** Total chip dimensions (1600μm × 1600μm)
+
+📦 **CORE_AREA:** Usable area for standard cells (20μm margin)
+
+🎯 **MACRO_PLACEMENT_CFG:** Pre-defined macro locations
+
+📌 **FP_PIN_ORDER_CFG:** I/O pin placement rules
+
+🔧 **PLACE_PINS_ARGS:** Pin exclusion zones for routing
+
+⚡ **TNS_END_PERCENT:** Timing optimization target (100% = complete)
+
+🔄 **REMOVE_ABC_BUFFERS:** Synthesis buffer optimization
+
+🎨 **MAGIC_ZEROIZE_ORIGIN:** Layout coordinate system reference
+
+🔍 **MAGIC_EXT_USE_GDS:** Parasitic extraction from GDSII
+
+⏰ **CTS_BUF_DISTANCE:** Maximum buffer spacing in clock tree (600μm)
+
+🚫 **SKIP_GATE_CLONING:** Disable gate cloning for CTS
+
+---
+
+## 🚀 Flow Execution
+
+### 🔧 Environment Preparation
+
+```bash
+# 📂 Navigate to ORFS directory
+cd OpenROAD-flow-scripts
+
+# 📁 Enter flow directory
+cd flow
+
+# 🌍 Source environment variables
+source ../env.sh
+```
+
+---
+
+## 1️⃣ Synthesis Stage
+
+### 🔨 Execute Synthesis
+
+```bash
+# ⚙️ Run logic synthesis with Yosys
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk synth
+```
+
+### 📊 Synthesis Outputs
+
+✅ **Gate-Level Netlist:** `1_synth.v` - RTL converted to standard cells
+
+📈 **Timing Reports:** Setup/hold time analysis, WNS, TNS
+
+📊 **Area Report:** Cell count, total area, utilization statistics
+
+🔍 **Check Report:** `synth_check.txt` - Design rule violations
+
+📉 **Statistics:** `synth_stat.txt` - Cell type distribution
+
+### 🎯 Key Metrics to Verify
+
+✓ **Total Cells:** Approximately 30,000 standard cells
+
+✓ **Sequential Elements:** Flip-flops, latches count
+
+✓ **Combinational Logic:** Gate count by type
+
+✓ **Macro Instances:** DAC and PLL integration verified
+
+✓ **Timing Estimate:** Initial WNS/TNS before physical design
+
+---
+
+## 2️⃣ Floorplan Stage
+
+### 📐 Execute Floorplanning
+
+```bash
+# 🗺️ Run floorplan generation
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk floorplan
+
+# 🖼️ Open GUI to visualize floorplan
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
+```
+
+### 🎨 Floorplan Achievements
+
+📏 **Die Sizing:** 1600μm × 1600μm total die area established
+
+📦 **Core Area:** 1570μm × 1570μm usable placement region
+
+🎯 **Macro Placement:** DAC and PLL positioned per macro.cfg
+
+📌 **Pin Assignment:** I/O pins placed according to pin_order.cfg
+
+⚡ **Power Grid:** Power rings and straps generated
+
+🔌 **VDD/VSS Network:** Complete power distribution structure
+
+### 🖼️ Visual Verification
+
+🟦 **Die Boundary:** Outer rectangle defining chip edges
+
+🟨 **Core Area:** Inner placement region for standard cells
+
+🟥 **Macro Blocks:** Rectangular analog IP placements
+
+🟩 **Power Rings:** Metal straps forming power distribution
+
+🟪 **I/O Pins:** Metal rectangles at die periphery
+
+---
+
+## 3️⃣ Placement Stage
+
+### 🎯 Execute Placement
+
+```bash
+# 📍 Run global and detailed placement
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk place
+
+# 🖼️ Open GUI to visualize placement
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
+```
+
+### 🏗️ Placement Process
+
+🌍 **Global Placement:** Initial cell positioning optimizing wirelength
+
+🎯 **Detailed Placement:** Legalization ensuring design rule compliance
+
+📊 **Density Optimization:** Balancing cell distribution for routability
+
+🔍 **Congestion Analysis:** Identifying potential routing bottlenecks
+
+### 📊 Analysis Heatmaps
+
+#### 📌 Routing Congestion Map
+🟥 **Hot Spots:** Areas with high net density (potential routing issues)
+🟨 **Medium Density:** Moderate routing complexity
+🟩 **Low Density:** Easy routing regions
+
+#### 📌 Estimated Congestion (RUDY)
+📏 **RUDY Metric:** Rectangular Uniform wire Density
+🎯 **Purpose:** Predicting routing difficulty before actual routing
+
+#### 📌 IR Drop Analysis
+⚡ **Voltage Drop:** Power supply degradation across chip
+🔴 **Critical Areas:** Regions with significant IR drop (>10% VDD)
+🟢 **Safe Regions:** Adequate power delivery (<5% drop)
+
+#### 📌 Pin Density Distribution
+📍 **High Density:** Areas with many cell pins
+🎯 **Routing Impact:** Pin clusters require more routing resources
+
+#### 📌 Placement Density Map
+📦 **Utilization:** Percentage of area occupied by cells
+🎯 **Target:** 55-65% for VSDBabySoC (allows routing flexibility)
+
+#### 📌 Power Density Visualization
+⚡ **Power Hotspots:** Areas with high switching activity
+🌡️ **Thermal Concerns:** Regions requiring cooling consideration
+
+### 🔬 Cell-Level Inspection
+
+🔍 **Zoom View:** Individual standard cells visible in layout
+
+📐 **Row Structure:** Cells aligned in horizontal placement rows
+
+🔌 **Well Taps:** Power/ground connections at regular intervals
+
+🎨 **Macro Boundaries:** Clear separation between analog and digital
+
+---
+
+## 4️⃣ Clock Tree Synthesis
+
+### ⏰ Execute CTS
+
+```bash
+# 🌳 Build clock distribution tree
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk cts
+
+# 🖼️ Open GUI to visualize clock tree
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_cts
+```
+
+### 🌳 CTS Deliverables
+
+⚖️ **Balanced Clock Tree:** Equal path lengths to all sequential elements
+
+🔄 **Buffer Insertion:** Clock buffers added for signal integrity
+
+📊 **Skew Optimization:** Minimizing clock arrival time differences
+
+⚡ **Slew Control:** Managing clock edge transition times
+
+### 🎯 CTS Verification Metrics
+
+✓ **Clock Skew:** < 1 ns (target achieved)
+
+✓ **WNS (Worst Negative Slack):** ≈ 0 ns (timing met)
+
+✓ **TNS (Total Negative Slack):** ≈ 0 ns (no timing violations)
+
+✓ **Clock Latency:** Insertion delay from source to sinks
+
+✓ **Buffer Count:** Number of buffers/inverters in clock path
+
+### 🔍 Clock Tree Structure
+
+🌲 **Tree Topology:** H-tree or fishbone structure for balance
+
+🔵 **Root:** Clock source (PLL output or primary input)
+
+🟢 **Branches:** Hierarchical distribution levels
+
+🟡 **Leaves:** Clock pins of flip-flops/registers
+
+🔴 **Buffers:** Intermediate drivers maintaining signal strength
+
+---
+
+## 5️⃣ Routing Stage
+
+### 🛣️ Execute Routing
+
+```bash
+# 🗺️ Run global and detailed routing
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk route
+
+# 🖼️ Open GUI to visualize routing
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_route
+```
+
+### 🎯 Routing Process
+
+🌍 **Global Routing:** High-level path planning for all nets
+
+🔍 **Track Assignment:** Allocating routing resources per net
+
+🎨 **Detailed Routing:** TritonRoute performs precise metal routing
+
+📏 **DRC Fixing:** Iterative correction of design rule violations
+
+✓ **Verification:** Final DRC check ensuring manufacturability
+
+### 📊 Routing Outputs
+
+✅ **Routed DEF:** Complete design with all metal connections
+
+🔌 **Power Grid:** VDD/VSS mesh completed with droplet connections
+
+🌐 **Signal Nets:** All logical connections physically implemented
+
+📏 **Via Insertion:** Vertical connections between metal layers
+
+🚫 **DRC Status:** 0 violations (clean layout)
+
+### 🎨 Routing Visualization
+
+🟦 **Metal Layers:** Different colors for M1, M2, M3, M4, M5
+
+🔵 **Horizontal Routing:** Even metal layers (M2, M4)
+
+🟣 **Vertical Routing:** Odd metal layers (M1, M3, M5)
+
+🟡 **Vias:** Small squares connecting different metal layers
+
+🟢 **Power Straps:** Thick metal lines for power distribution
+
+---
+
+## 6️⃣ Parasitic Extraction
+
+### ⚡ Generate SPEF File
+
+```bash
+# 🔬 Extract post-route parasitics
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk parasitics
+```
+
+### 📊 SPEF Output Location
+
+📂 **File Path:** `results/sky130hd/vsdbabysoc/parasitics/vsdbabysoc.spef`
+
+### 🧠 Understanding SPEF
+
+📖 **Format:** Standard Parasitic Exchange Format (IEEE 1481)
+
+🔌 **Contents:** Net-by-net resistance and capacitance values
+
+⚡ **RC Network:** Distributed RC model of each interconnect
+
+🎯 **Purpose:** Accurate delay calculation for timing signoff
+
+### 💡 SPEF Components
+
+**📏 Resistance Effects:**
+- 🔴 Wire resistance (Ω per unit length)
+- 🔵 Via resistance at layer transitions
+- 🟢 Impact: Voltage drop and delay increase
+
+**⚡ Capacitance Effects:**
+- 🟡 Wire-to-ground capacitance
+- 🟣 Coupling capacitance between adjacent nets
+- 🟠 Impact: Increased delay and potential crosstalk
+
+### 📈 Example Parasitic Impact
+
+💡 **1mm wire on Sky130:**
+- 📏 Adds ≈ 100 fF capacitance
+- 🔴 Adds ≈ 10 Ω resistance
+- ⏱️ Results in > 1 ns additional delay
+
+### 🎯 SPEF Usage in STA
+
+📊 **Back-Annotation:** SPEF loaded into OpenSTA timing engine
+
+⚡ **Accurate Delays:** Real parasitic delays replace wire load models
+
+✓ **Signoff Analysis:** Final timing verification with actual layout
+
+🎯 **Timing Closure:** Iterative optimization until timing met
+
+---
+
+## 🧾 Final Verification Summary
+
+### 📊 Design Metrics
+
+| Parameter              | Result / Observation                             |
+| :--------------------- | :----------------------------------------------- |
+| 🎯 **Design**          | VSDBabySoC – 8-bit RISC-V SoC Core + Peripherals|
+| 💾 **Technology**      | Sky130 HD PDK (130nm High Density)              |
+| 📦 **Core Utilization**| ≈ 55 – 65 % (optimal for routing)               |
+| 🔢 **Total Instances** | ≈ 30,000 standard cells                         |
+| ⏰ **Clock Skew**      | < 1 ns (well-balanced tree)                     |
+| 🌐 **Routed Nets**     | All nets successfully connected                  |
+| 🚫 **DRC Violations**  | 0 (clean, manufacturable layout)                |
+| ⚡ **SPEF File**        | Generated successfully for post-route STA        |
+| 📐 **Die Area**        | 1600 μm × 1600 μm                               |
+| 📦 **Core Area**       | 1570 μm × 1570 μm                               |
+| 🔌 **Macro Count**     | 2 (AVSD DAC + AVSD PLL)                         |
+
+---
+
+## 📒 Key Learnings — Week 7
+
+### 🛠️ Tools and Frameworks Mastered
+
+✔ **OpenROAD** - Complete physical design automation platform
+
+✔ **Yosys** - Open-source RTL synthesis engine
+
+✔ **OpenSTA** - Static timing analysis for signoff
+
+✔ **TritonTools** - Suite for floorplan, placement, CTS, routing
+
+✔ **Sky130 PDK** - Technology libraries for ASIC implementation
+
+✔ **ORFS Environment** - Standardized scripts for repeatable flows
+
+✔ **Magic** - Layout viewer and parasitic extraction
+
+✔ **KLayout** - GDSII visualization and verification
+
+### 🔹 Workflow Achievements
+
+#### 1️⃣ Environment Setup & Verification
+- 🔧 ORFS installation and dependency resolution
+- 🏗️ Built OpenROAD locally from source
+- ✅ Verified Yosys, OpenROAD, TritonTools binaries
+
+#### 2️⃣ Design Integration
+- 📝 Added VSDBabySoC RTL files to ORFS structure
+- 🎯 Integrated analog macros (DAC, PLL) with LEF/GDS/LIB
+- ⚙️ Configured floorplan, timing, and placement parameters
+
+#### 3️⃣ Full Flow Execution
+- 🔨 **Synthesis:** Gate-level netlist, timing, area reports
+- 📐 **Floorplan:** Die/core dimensions, pin/macro placement
+- 🎯 **Placement:** Global and detailed cell positioning
+- ⏰ **CTS:** Balanced clock tree with skew optimization
+- 🛣️ **Routing:** DRC-clean metal connections
+- 📊 **SPEF:** Parasitic extraction for accurate timing
+
+#### 4️⃣ Analysis and Optimization
+- 📊 Congestion heatmap analysis
+- ⚡ IR drop identification and mitigation
+- 📍 Density distribution optimization
+- 🔍 Timing path analysis and fixing
+
+### 💡 Technical Insights Gained
+
+🎯 **Floorplan Impact:** Macro placement critically affects routing congestion
+
+⚡ **Timing Closure:** CTS and routing can significantly alter timing results
+
+🔌 **Power Planning:** Adequate power grid prevents IR drop issues
+
+📊 **Utilization Trade-off:** Higher density saves area but complicates routing
+
+🎨 **Visualization:** Heatmaps essential for identifying design bottlenecks
+
+🔍 **Iteration:** Physical design is iterative, not one-shot process
+
+---
+
+## 🧾 Command Reference Summary
+
+| Stage                     | Command                                          |
+| :------------------------ | :----------------------------------------------- |
+| 🔨 **Synthesis**          | `make DESIGN_CONFIG=...config.mk synth`          |
+| 📐 **Floorplan**          | `make DESIGN_CONFIG=...config.mk floorplan`      |
+| 🎯 **Placement**          | `make DESIGN_CONFIG=...config.mk place`          |
+| ⏰ **CTS**                | `make DESIGN_CONFIG=...config.mk cts`            |
+| 🛣️ **Routing**           | `make DESIGN_CONFIG=...config.mk route`          |
+| ⚡ **Parasitic Extract**  | `make DESIGN_CONFIG=...config.mk parasitics`     |
+| 🖼️ **GUI Floorplan**      | `make DESIGN_CONFIG=...config.mk gui_floorplan`  |
+| 🖼️ **GUI Placement**      | `make DESIGN_CONFIG=...config.mk gui_place`      |
+| 🖼️ **GUI CTS**            | `make DESIGN_CONFIG=...config.mk gui_cts`        |
+| 🖼️ **GUI Routing**        | `make DESIGN_CONFIG=...config.mk gui_route`      |
+| 🔍 **Full Flow**          | `make DESIGN_CONFIG=...config.mk`                |
+
+---
 
 
 
