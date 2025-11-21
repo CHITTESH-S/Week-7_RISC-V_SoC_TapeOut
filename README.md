@@ -844,29 +844,43 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 ### 📊 Analysis Heatmaps
 
 #### 📌 Routing Congestion Map
+
 🟥 **Hot Spots:** Areas with high net density (potential routing issues)
+
 🟨 **Medium Density:** Moderate routing complexity
+
 🟩 **Low Density:** Easy routing regions
 
 #### 📌 Estimated Congestion (RUDY)
+
 📏 **RUDY Metric:** Rectangular Uniform wire Density
+
 🎯 **Purpose:** Predicting routing difficulty before actual routing
 
 #### 📌 IR Drop Analysis
+
 ⚡ **Voltage Drop:** Power supply degradation across chip
+
 🔴 **Critical Areas:** Regions with significant IR drop (>10% VDD)
+
 🟢 **Safe Regions:** Adequate power delivery (<5% drop)
 
 #### 📌 Pin Density Distribution
+
 📍 **High Density:** Areas with many cell pins
+
 🎯 **Routing Impact:** Pin clusters require more routing resources
 
 #### 📌 Placement Density Map
+
 📦 **Utilization:** Percentage of area occupied by cells
+
 🎯 **Target:** 55-65% for VSDBabySoC (allows routing flexibility)
 
 #### 📌 Power Density Visualization
+
 ⚡ **Power Hotspots:** Areas with high switching activity
+
 🌡️ **Thermal Concerns:** Regions requiring cooling consideration
 
 ### 🔬 Cell-Level Inspection
