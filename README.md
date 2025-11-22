@@ -749,6 +749,18 @@ source ../env.sh
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk synth
 ```
 
+<div align="center">
+
+<img width="1024" height="1024" alt="synth1" src="https://github.com/user-attachments/assets/9ebea6b6-452c-4101-85f7-025a637c4141" />
+
+</div>
+
+<div align="center">
+
+<img width="1024" height="1024" alt="synth2" src="https://github.com/user-attachments/assets/920a4a7f-bb9e-4f7f-bef4-38cbf4c51064" />
+
+</div>
+
 ### 📊 Synthesis Outputs
 
 ✅ **Gate-Level Netlist:** `1_synth.v` - RTL converted to standard cells
@@ -784,6 +796,19 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk synth
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk floorplan
 ```
 
+<div align="center">
+
+<img width="1024" height="1024" alt="floorplan1" src="https://github.com/user-attachments/assets/ba8e7371-a58e-4e66-911a-323391789abc" />
+
+
+</div>
+
+<div align="center">
+
+<img width="1024" height="1024" alt="floorplan2" src="https://github.com/user-attachments/assets/80929431-140d-48e2-ad71-7faf651f2131" />
+
+</div>
+
 ### 🎨 Floorplan Achievements
 
 📏 **Die Sizing:** 1600μm × 1600μm total die area established
@@ -802,6 +827,12 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk floorplan
 # 🖼️ Open GUI to visualize floorplan
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
 ```
+
+<div align="center">
+
+<img width="1024" height="1024" alt="gui_floorplan" src="https://github.com/user-attachments/assets/0ef59903-7393-4df5-84ee-3bf2b241bd8d" />
+
+</div>
 
 ### 🖼️ Visual Verification
 
@@ -826,6 +857,18 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk place
 ```
 
+<div align="center">
+
+<img width="1024" height="1024" alt="place1" src="https://github.com/user-attachments/assets/79e92bfc-0851-4678-aadb-a0e354aa1f38" />
+
+</div>
+
+<div align="center">
+
+<img width="1024" height="1024" alt="place12" src="https://github.com/user-attachments/assets/6f6e56cd-2631-42f8-819e-4b28c2069633" />
+
+</div>
+
 ### 🏗️ Placement Process
 
 🌍 **Global Placement:** Initial cell positioning optimizing wirelength
@@ -841,9 +884,21 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk place
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 ```
 
+<div align="center">
+
+<img width="1024" height="1024" alt="gui_place" src="https://github.com/user-attachments/assets/28a44b28-5aa8-4210-851c-240790796d59" />
+
+</div>
+
 ### 📊 Analysis Heatmaps
 
 #### 📌 Routing Congestion Map
+
+<div align="center">
+
+<img width="1024" height="1024" alt="routing" src="https://github.com/user-attachments/assets/06a9c67f-5c7f-4ce1-ab6f-f9de8712f921" />
+
+</div>
 
 🟥 **Hot Spots:** Areas with high net density (potential routing issues)
 
@@ -853,11 +908,23 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 
 #### 📌 Estimated Congestion (RUDY)
 
+<div align="center">
+
+<img width="1024" height="1024" alt="rudy" src="https://github.com/user-attachments/assets/d8c99617-9455-4711-9dee-aba62fb8c2ed" />
+
+</div>
+
 📏 **RUDY Metric:** Rectangular Uniform wire Density
 
 🎯 **Purpose:** Predicting routing difficulty before actual routing
 
 #### 📌 IR Drop Analysis
+
+<div align="center">
+
+<img width="1024" height="1024" alt="irdrop" src="https://github.com/user-attachments/assets/2a8a9cc7-5ad1-48b0-86b9-7adec22c4492" />
+
+</div>
 
 ⚡ **Voltage Drop:** Power supply degradation across chip
 
@@ -867,17 +934,35 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 
 #### 📌 Pin Density Distribution
 
+<div align="center">
+
+<img width="1024" height="1024" alt="pin_density" src="https://github.com/user-attachments/assets/dbb94526-7b21-4402-a6fc-7be0bf26af36" />
+
+</div>
+
 📍 **High Density:** Areas with many cell pins
 
 🎯 **Routing Impact:** Pin clusters require more routing resources
 
 #### 📌 Placement Density Map
 
+<div align="center">
+
+<img width="1024" height="1024" alt="placement_density" src="https://github.com/user-attachments/assets/3945b329-c2e0-4570-a2f0-09df6db02664" />
+
+</div>
+
 📦 **Utilization:** Percentage of area occupied by cells
 
 🎯 **Target:** 55-65% for VSDBabySoC (allows routing flexibility)
 
 #### 📌 Power Density Visualization
+
+<div align="center">
+
+<img width="1024" height="1024" alt="power_density" src="https://github.com/user-attachments/assets/b65e28ac-2186-434c-a136-f6c1597eb10a" />
+
+</div>
 
 ⚡ **Power Hotspots:** Areas with high switching activity
 
@@ -904,6 +989,18 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk cts
 ```
 
+<div align="center">
+
+<img width="1024" height="1024" alt="cts1" src="https://github.com/user-attachments/assets/11fc4b30-77a7-4aa3-8ea3-8c69717d0957" />
+
+</div>
+
+<div align="center">
+
+<img width="1024" height="1024" alt="cts2" src="https://github.com/user-attachments/assets/23629de5-e177-4cf1-8388-4db1daeacf18" />
+
+</div>
+
 ### 🌳 CTS Deliverables
 
 ⚖️ **Balanced Clock Tree:** Equal path lengths to all sequential elements
@@ -919,6 +1016,12 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk cts
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_cts
 ```
 
+<div align="center">
+
+<img width="1024" height="1024" alt="gui_cts" src="https://github.com/user-attachments/assets/c82ac763-97af-41ba-a5b4-b56562b1b718" />
+
+</div>
+
 ### 🎯 CTS Verification Metrics
 
 ✓ **Clock Skew:** < 1 ns (target achieved)
@@ -930,18 +1033,6 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_cts
 ✓ **Clock Latency:** Insertion delay from source to sinks
 
 ✓ **Buffer Count:** Number of buffers/inverters in clock path
-
-### 🔍 Clock Tree Structure
-
-🌲 **Tree Topology:** H-tree or fishbone structure for balance
-
-🔵 **Root:** Clock source (PLL output or primary input)
-
-🟢 **Branches:** Hierarchical distribution levels
-
-🟡 **Leaves:** Clock pins of flip-flops/registers
-
-🔴 **Buffers:** Intermediate drivers maintaining signal strength
 
 ---
 
